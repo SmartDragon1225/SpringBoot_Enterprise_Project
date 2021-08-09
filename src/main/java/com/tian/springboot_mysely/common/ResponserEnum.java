@@ -1,7 +1,6 @@
 package com.tian.springboot_mysely.common;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
