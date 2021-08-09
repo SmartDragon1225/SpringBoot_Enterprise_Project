@@ -1,16 +1,18 @@
 package com.tian.springboot_mysely.controller;
 
 
-import com.tian.springboot_mysely.pojo.ResultBean;
+import com.tian.springboot_mysely.common.ResponseServer;
+import com.tian.springboot_mysely.common.ResponserEnum;
 import com.tian.springboot_mysely.pojo.Student;
 import com.tian.springboot_mysely.service.impl.StudentServiceImpl;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Package: com.tian.springbootlogin.controller
@@ -21,8 +23,9 @@ import java.util.List;
  * Copyright: Copyright (c) 2021
  * Modified By: SmartDragon
  */
-@Controller
+@RestController
 @RequestMapping("/student")
+@Slf4j
 public class StudentController {
     @RequestMapping("login")
     public String login(){
@@ -31,12 +34,51 @@ public class StudentController {
 
     @Autowired
     StudentServiceImpl studentService;
+
     @RequestMapping("/list")
     @ResponseBody
-    public ResultBean list(){
+    public ResponseServer list(){
         HashMap<Object, Object> hashMap = new HashMap<>();
         List<Student> list = studentService.list();
         hashMap.put("students",list);
-        return new ResultBean("200","查询成功",hashMap);
+        return ResponseServer.success(hashMap);
+        //return new ResultBean("200","查询成功",hashMap);
+    }
+
+    @GetMapping("/select/{id}")
+    public ResponseServer select(@PathVariable("id") int id){
+        Student student = studentService.select(id);
+        if(student != null){
+            return ResponseServer.success(student);
+        }else {
+            return ResponseServer.error(ResponserEnum.NOT_FIND);
+        }
+    }
+
+    //至于如何传map,前端的事情！
+    @PostMapping("/addstudent")
+    public ResponseServer addstudent(Map map){
+        if(map == null){
+            return ResponseServer.error(ResponserEnum.NOT_FIND);
+        }
+        //已经存在用户，不能添加
+        Student student = studentService.select((Integer) map.get("id"));
+        System.out.println(student);
+        log.info(String.valueOf(student));
+        if(StringUtils.isEmpty(student)){
+            return ResponseServer.error(ResponserEnum.NOT_UNIQUE);
+        }
+        studentService.add(map);
+        return ResponseServer.success();
+    }
+
+    //分页查询
+    @GetMapping("/pagelist/{page}/{rows}")
+    public ResponseServer pagelist(@PathVariable("page") Integer page,
+                                   @PathVariable("rows") Integer rows) {
+        if(page == null || rows == null){
+            return ResponseServer.error(ResponserEnum.NOT_FIND);
+        }
+        return ResponseServer.success(studentService.pageList(page,rows));
     }
 }

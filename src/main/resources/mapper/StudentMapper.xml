@@ -9,6 +9,11 @@
         select * from student;
     </select>
 
+    <!--PageList分页查询注意不要写分号，因为要拼接limit rows-->
+    <select id="pageList" resultType="Student">
+        select * from student
+    </select>
+
     <!--selectById-->
     <select id="slectById" resultType="Student">
         select * from student where id = #{id}
@@ -20,7 +25,7 @@
     </select>
 
     <!--add-->
-    <insert id="add">
+    <insert id="add" parameterType="Student">
         insert into student value (#{id},#{name},#{age},#{sex},
             #{place},#{creat_time},#{updata_time});
     </insert>

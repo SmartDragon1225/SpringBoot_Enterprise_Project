@@ -21,6 +21,8 @@ public interface StudentDao {
 
     List<Student> list();
 
+    List<Student> pageList();//分页查询
+
     Student slectById(int id);
 
     int add(Student student);

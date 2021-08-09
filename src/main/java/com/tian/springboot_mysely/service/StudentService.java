@@ -5,8 +5,10 @@ package com.tian.springboot_mysely.service;
 
 
 import com.tian.springboot_mysely.pojo.Student;
+import com.tian.springboot_mysely.pojo.pageEntity.PageEntity;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Package: com.tian.lastspringboot.pojo
@@ -20,10 +22,12 @@ import java.util.List;
 public interface StudentService {
 
     List<Student> list();
+    PageEntity pageList(Integer page, Integer rows);
 
     Student select(int id);
 
-    int add(Student student);
+    int add(Student student);//平时开发
+    void add(Map map);//企业开发
 
     int delete(int id);
 
