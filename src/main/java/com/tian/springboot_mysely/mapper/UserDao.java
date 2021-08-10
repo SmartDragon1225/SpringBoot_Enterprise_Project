@@ -2,6 +2,7 @@ package com.tian.springboot_mysely.mapper;
 
 
 import com.tian.springboot_mysely.pojo.User;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,4 +22,7 @@ public interface UserDao {
     //@Select("select * from user where username = #{username} and password = #{password}")
     User login(@RequestParam("username") String username,
                @RequestParam("password") String password);
+    //注册用户
+    //@Insert("insert into user value (#{id},#{username},#{password})")
+    int register(User user);
 }

@@ -21,8 +21,14 @@ public class UserServiveImpl implements UserService {
 
     @Autowired
     UserDao userDao;
+
     @Override
     public User login(String username, String password) {
         return userDao.login(username,password);
+    }
+
+    @Override
+    public int register(User user) {
+        return userDao.register(user);
     }
 }

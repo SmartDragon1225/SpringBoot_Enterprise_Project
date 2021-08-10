@@ -14,4 +14,5 @@ import com.tian.springboot_mysely.pojo.User;
  */
 public interface UserService {
     User login(String username, String password);
+    int register(User user);
 }

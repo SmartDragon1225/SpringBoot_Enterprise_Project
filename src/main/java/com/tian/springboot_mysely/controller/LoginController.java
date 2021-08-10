@@ -1,8 +1,12 @@
 package com.tian.springboot_mysely.controller;
 
+import com.tian.springboot_mysely.pojo.User;
+import com.tian.springboot_mysely.service.UserService;
 import com.tian.springboot_mysely.utils.ValidateImageCodeUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.imageio.ImageIO;
@@ -24,6 +28,10 @@ import java.io.IOException;
 @Controller
 @RequestMapping("/login")
 public class LoginController {
+
+    @Autowired
+    UserService userService;
+
     @RequestMapping("/login")
     public String login(){
         return "login";
@@ -34,6 +42,36 @@ public class LoginController {
         return "html/login";
     }
 
+
+    /**
+     * 注册方法
+     *
+     * @param user
+     * @param code
+     * @param session
+     * @return
+     */
+    @PostMapping("/register")
+    public String register(User user, String code, HttpSession session) {
+        String sessionCode = (String) session.getAttribute("code");
+        if (sessionCode.equalsIgnoreCase(code)) {
+            userService.register(user);
+            return "redirect:/index";
+        } else {
+            return "redirect:/toRegister";
+        }
+    }
+
+    @PostMapping(value = "/login")
+    public String login(String username, String password) {
+        //查询数据库登录系统
+        User login = userService.login(username, password);
+        if (login != null) {
+            return "redirect:/emp/findAll";
+        } else {
+            return "redirect:/index";
+        }
+    }
     //生成验证码
     @GetMapping("/code")
     public void getVerification(HttpSession session, HttpServletResponse response) throws IOException {

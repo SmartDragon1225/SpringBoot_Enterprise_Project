@@ -10,35 +10,35 @@
     <select id="login" resultType="User">
         select * from user where username = #{username} and password = #{password}
     </select>
-    <!--&lt;!&ndash;list&ndash;&gt;
+    <!--list-->
     <select id="query" resultType="com.tian.lastspringboot.pojo.User">
         select * from user;
     </select>
 
-    &lt;!&ndash;selectById&ndash;&gt;
+    <!--selectById-->
     <select id="slect" resultType="User">
         select * from user where id = #{id}
     </select>
 
-    &lt;!&ndash;login&ndash;&gt;
+    <!--login-->
     <select id="login" resultType="User">
         select * from user where id = #{id} and name = #{username}
     </select>
 
-    &lt;!&ndash;add&ndash;&gt;
-    <insert id="add" parameterType="int">
+    <!--register-->
+    <insert id="register" parameterType="int">
         insert into user value (#{id},#{username},#{password});
     </insert>
 
-    &lt;!&ndash;delete&ndash;&gt;
+    <!--delete-->
     <delete id="delete" parameterType="int">
         delete from user where id = #{id}
     </delete>
 
-    &lt;!&ndash;update&ndash;&gt;
+    <!--update-->
     <update id="update" parameterType="User">
         update student set id=#{id},username=#{username},password=#{password}
         where id=#{id}
-    </update>-->
+    </update>
 
 </mapper>

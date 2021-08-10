@@ -18,6 +18,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 //相应服务
 public class ResponseServer {
+
     private Integer code; //code码
     private String message;//提示信息
     private Object data;//数据存放
