@@ -7,18 +7,18 @@ spring:
     url: jdbc:mysql://127.0.0.1:3306/my_learn?useUnicode=true&characterEncoding=UTF-8&useSSL=true&serverTimezone=UTC
   thymeleaf:
     cache: false
-  resources:
-    static-locations: classpath:/templates/,classpath:/static/
+#  resources:
+#    static-locations: classpath:/templates/,classpath:/static/
 
 #mybatis的文件配置
 mybatis:
   mapper-locations: classpath:mapper/*.xml
-  type-aliases-package: com.tian.springboot_mysely.pojo
+  type-aliases-package: com.tian.springboot1.pojo
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 #项目端口和项目名配置
 server:
-  port: 8888
+  port: 8889
 
 

@@ -1,14 +1,9 @@
-package com.tian.springboot_mysely.service.impl;
+package com.tian.springboot1.service.impl;
 
 
-
-import com.fasterxml.jackson.databind.util.JSONPObject;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
-import com.tian.springboot_mysely.mapper.StudentDao;
-import com.tian.springboot_mysely.pojo.Student;
-import com.tian.springboot_mysely.pojo.pageEntity.PageEntity;
-import com.tian.springboot_mysely.service.StudentService;
+import com.tian.springboot1.mapper.StudentDao;
+import com.tian.springboot1.pojo.Student;
+import com.tian.springboot1.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.util.StringUtils;
@@ -30,7 +25,7 @@ public class StudentServiceImpl implements StudentService {
         return studentDao.list();
     }
 
-    @Override
+    /*@Override
     public PageEntity pageList(Integer page, Integer rows) {
         PageHelper.startPage(page,rows);
         List<Student> list = studentDao.pageList();
@@ -39,7 +34,7 @@ public class StudentServiceImpl implements StudentService {
         pageEntity.setPageList(pageInfo.getList());
         pageEntity.setTotal(pageInfo.getTotal());
         return pageEntity;
-    }
+    }*/
 
     @Override
     public Student select(int id) {

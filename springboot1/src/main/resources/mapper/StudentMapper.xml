@@ -2,30 +2,30 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.tian.springboot_mysely.mapper.StudentDao">
+<mapper namespace="com.tian.springboot1.mapper.StudentDao">
 
     <!--list-->
-    <select id="list" resultType="com.tian.springboot_mysely.pojo.Student">
+    <select id="list" resultType="Student">
         select * from student;
     </select>
 
     <!--PageList分页查询注意不要写分号，因为要拼接limit rows-->
-    <select id="pageList" resultType="com.tian.springboot_mysely.pojo.Student">
+    <select id="pageList" resultType="Student">
         select * from student
     </select>
 
     <!--selectById-->
-    <select id="slectById" resultType="com.tian.springboot_mysely.pojo.Student">
+    <select id="slectById" resultType="Student">
         select * from student where id = #{id}
     </select>
 
     <!--login-->
-    <select id="login" resultType="com.tian.springboot_mysely.pojo.Student">
+    <select id="login" resultType="Student">
         select * from student where id = #{id} and name = #{name}
     </select>
 
     <!--add-->
-    <insert id="add" parameterType="com.tian.springboot_mysely.pojo.Student">
+    <insert id="add" parameterType="Student">
         insert into student value (#{id},#{name},#{age},#{sex},
             #{place},#{creat_time},#{updata_time});
     </insert>
@@ -36,7 +36,7 @@
     </delete>
 
     <!--updata-->
-    <update id="update" parameterType="com.tian.springboot_mysely.pojo.Student">
+    <update id="update" parameterType="Student">
         update student set id=#{id},name=#{name},age=#{age},sex=#{sex},place=#{place},
                       creat_time=#{creat_time},updata_time=#{updata_time}
         where id=#{id}

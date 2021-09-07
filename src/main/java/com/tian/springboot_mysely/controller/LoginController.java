@@ -3,6 +3,7 @@ package com.tian.springboot_mysely.controller;
 import com.tian.springboot_mysely.pojo.User;
 import com.tian.springboot_mysely.service.UserService;
 import com.tian.springboot_mysely.utils.ValidateImageCodeUtils;
+import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -76,6 +77,8 @@ public class LoginController {
     @GetMapping("/code")
     public void getVerification(HttpSession session, HttpServletResponse response) throws IOException {
         //生成验证码
+        Response response1 = null;
+        //response1.setContentType("");
         String securityCode = ValidateImageCodeUtils.getSecurityCode();
         BufferedImage image = ValidateImageCodeUtils.createImage(securityCode);
         //存入session中
@@ -84,4 +87,5 @@ public class LoginController {
         ServletOutputStream os = response.getOutputStream();
         ImageIO.write(image, "png", os);
     }
+
 }

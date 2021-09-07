@@ -7,22 +7,30 @@
 <mapper namespace="com.tian.springboot_mysely.mapper.UserDao">
 
     <!--登录-->
-    <select id="login" resultType="User">
+    <select id="login" resultType="com.tian.springboot_mysely.pojo.User">
         select * from user where username = #{username} and password = #{password}
     </select>
     <!--list-->
-    <select id="query" resultType="com.tian.lastspringboot.pojo.User">
+    <select id="query" resultType="com.tian.springboot_mysely.pojo.User">
         select * from user;
     </select>
 
     <!--selectById-->
-    <select id="slect" resultType="User">
+    <select id="slect" resultType="com.tian.springboot_mysely.pojo.User">
         select * from user where id = #{id}
     </select>
 
     <!--login-->
-    <select id="login" resultType="User">
-        select * from user where id = #{id} and name = #{username}
+    <select id="login1" resultType="com.tian.springboot_mysely.pojo.User">
+        select * from user
+         <where>
+             <if test="id != null or id !=''">
+                 and id = #{id}
+             </if>
+             <if test="username !=null or username !=''">
+                 and username = #{username}
+             </if>
+         </where>
     </select>
 
     <!--register-->
@@ -32,11 +40,16 @@
 
     <!--delete-->
     <delete id="delete" parameterType="int">
-        delete from user where id = #{id}
+        delete from user
+        <where>
+            <if test="id != null or id !=''">
+                and id = #{id}
+            </if>
+        </where>
     </delete>
 
     <!--update-->
-    <update id="update" parameterType="User">
+    <update id="update" parameterType="com.tian.springboot_mysely.pojo.User">
         update student set id=#{id},username=#{username},password=#{password}
         where id=#{id}
     </update>

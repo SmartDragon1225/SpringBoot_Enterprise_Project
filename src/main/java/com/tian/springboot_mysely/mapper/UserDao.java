@@ -1,6 +1,7 @@
 package com.tian.springboot_mysely.mapper;
 
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.tian.springboot_mysely.pojo.User;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  * Modified By: SmartDragon
  */
 @Mapper
-public interface UserDao {
+public interface UserDao extends BaseMapper<User> {
     //登录
     //@Select("select * from user where username = #{username} and password = #{password}")
     User login(@RequestParam("username") String username,
