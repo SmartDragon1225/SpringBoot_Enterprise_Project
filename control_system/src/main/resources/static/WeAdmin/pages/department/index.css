@@ -1,0 +1,32 @@
+.container{
+    padding-top: 50px;
+    background: #fff;
+}
+.btnBox{
+    text-align: left;
+    /* margin-top: 30px; */
+}
+.formContainer{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding-bottom: 30px;
+}
+.layui-form-item{
+    width: 100%;
+}
+.layui-form-label {
+    text-align: left;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+}
+.row{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    border-bottom: 1px solid #808080;
+}

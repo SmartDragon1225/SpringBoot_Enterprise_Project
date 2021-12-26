@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<!--
+	作者：github.com/WangEn
+	时间：2018-02-02
+	描述：添加文章类别
+-->  
+  <head>
+    <meta charset="UTF-8">
+    <title>职位修改</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<link rel="stylesheet" href="../../static/css/font.css">
+	<link rel="stylesheet" href="../../static/css/weadmin.css">
+      <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+      <script src="../../lib/layui/layui.js" charset="utf-8"></script>
+      <script src="../../static/js/jquery.1.11.3.min.js"></script>
+      <script src="../../static/js/util/util.js"></script>
+      <script src="../../static/js/editJob.js"></script>
+  </head>
+  
+  <body>
+        <div class="weadmin-nav">
+                <span class="layui-breadcrumb">
+            <a href="">首页</a>
+            <a href="">职位管理</a>
+            <a>
+              <cite>修改</cite></a>
+          </span>
+                <a class="layui-btn layui-btn-sm" style="line-height:1.6em;margin-top:3px;float:right" href="javascript:location.replace(location.href);" title="刷新">
+                    <i class="layui-icon" style="line-height:30px">ဂ</i></a>
+            </div>
+            <div class="weadmin-body">
+                    <div class="layui-row">
+                        <form class="layui-form layui-col-md12 we-search" id="jobForm">
+                            <form class="layui-form formContainer">
+                                <div class="layui-input-inline">
+                                  <input type="hidden" name = "jobId" id="jobId"/>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label for="dept" class="layui-form-label">
+                                        <span class="we-red">*</span>部门
+                                    </label>
+                                    <div class="layui-input-inline">
+                                        <select id="dept" name="departmentId" class="valid">
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label for="jobName" class="layui-form-label">
+                                        <span class="we-red">*</span>职位名称
+                                    </label>
+                                    <div class="layui-input-inline input-item">
+                                        <input type="text" id="jobName" name="name" required="" lay-verify="required" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item input-item">
+                                    <label for="jobRemark" class="layui-form-label">
+                                        <span class="we-red">*</span>详细描述
+                                    </label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" id="jobRemark" name="remark" required="" lay-verify="required" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <div class="layui-input-block layui-form">
+                                        <input type="radio" name="status" value="1" title="启用"/>
+                                        <input type="radio" name="status" value="2" title="禁用"/>
+                                    </div>
+                                </div>
+                            </form>
+                        </form>
+                        <button class="layui-btn layui-btn-lg" style="margin-left: 110px" onclick="updateJob()">修改</button>
+                    </div>
+            
+                </div>
+    <script>
+        layui.use(['form','layer'], function(){
+          	var form = layui.form,
+          		layer = layui.layer;
+        });
+    </script>
+  </body>
+</html>

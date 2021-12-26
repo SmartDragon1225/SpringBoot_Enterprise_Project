@@ -4,12 +4,14 @@ package com.tian.springboot_mysely.controller;
 import com.tian.springboot_mysely.common.ResponseServer;
 import com.tian.springboot_mysely.common.ResponserEnum;
 import com.tian.springboot_mysely.pojo.Student;
+import com.tian.springboot_mysely.service.UserService;
 import com.tian.springboot_mysely.service.impl.StudentServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,7 +35,10 @@ public class StudentController {
     }
 
     @Autowired
-    StudentServiceImpl studentService;
+    private StudentServiceImpl studentService;
+
+    @Resource
+    private UserService userService;
 
     @RequestMapping("/list")
     @ResponseBody
@@ -45,13 +50,28 @@ public class StudentController {
         //return new ResultBean("200","查询成功",hashMap);
     }
 
-    @GetMapping("/select/{id}")
-    public ResponseServer select(@PathVariable("id") int id){
-        Student student = studentService.select(id);
+    @RequestMapping("/modify")
+    public ResponseServer modify(@RequestBody Student student){
+        userService.modify(student);
+        return ResponseServer.error(200,"缓存成功！");
+    }
+
+    @PostMapping ("/submit")
+    public ResponseServer submit(@RequestBody Student student){
+        boolean submit = userService.submit(student);
+        if(!submit){
+            return ResponseServer.error(201,"更新失败！");
+        }
+        return ResponseServer.error(200,"更新成功！");
+    }
+
+    @GetMapping("/select")
+    public ResponseServer select(@RequestParam("name") String name){
+        Student student = studentService.select(name);
         if(student != null){
             return ResponseServer.success(student);
         }else {
-            return ResponseServer.error(ResponserEnum.NOT_FIND);
+            return ResponseServer.error(404,"NOT FIND");
         }
     }
 
@@ -62,12 +82,12 @@ public class StudentController {
             return ResponseServer.error(ResponserEnum.NOT_FIND);
         }
         //已经存在用户，不能添加
-        Student student = studentService.select((Integer) map.get("id"));
+        /*//Student student = studentService.select((Long) map.get("id"));
         System.out.println(student);
         log.info(String.valueOf(student));
         if(StringUtils.isEmpty(student)){
             return ResponseServer.error(ResponserEnum.NOT_UNIQUE);
-        }
+        }*/
         studentService.add(map);
         return ResponseServer.success();
     }

@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tian.control_system.mapper.RecordMapper">
+
+     <!--结果集-->
+	<resultMap id="RecordResult" type="com.tian.control_system.pojo.Record">
+		<result property="recordId" column="record_id" />			
+		<result property="cardId" column="card_id" />			
+		<result property="address" column="address" />			
+		<result property="postCode" column="post_code" />			
+		<result property="phone" column="phone" />			
+		<result property="tel" column="tel" />			
+		<result property="qqNum" column="qq_num" />			
+		<result property="email" column="email" />			
+		<result property="sex" column="sex" />			
+		<result property="party" column="party" />			
+		<result property="birthday" column="birthday" />			
+		<result property="race" column="race" />			
+		<result property="education" column="education" />			
+		<result property="speciality" column="speciality" />			
+		<result property="hobby" column="hobby" />			
+		<result property="remark" column="remark" />			
+		<result property="createTime" column="create_time" />			
+	</resultMap>
+	
+    <!--新增数据-->
+	<insert id="add" parameterType="com.tian.control_system.pojo.Record" useGeneratedKeys="true" keyProperty="recordId">
+        insert into t_record (card_id, address, post_code, phone, tel, qq_num, email, sex, party, birthday, race, education, speciality, hobby, remark, create_time )
+		values (#{cardId}, #{address}, #{postCode}, #{phone}, #{tel}, #{qqNum}, #{email}, #{sex}, #{party}, #{birthday}, #{race}, #{education}, #{speciality}, #{hobby}, #{remark}, #{createTime})
+	</insert>
+	
+	<!--通过主键Id查询-->
+	<select id="findById" resultMap="RecordResult" useCache="false">
+		select * from t_record
+		where record_id = #{_parameter}
+	</select>
+	
+	<!--获取所有的数据-->
+	<select id="getAll" resultMap="RecordResult" useCache="false">
+        select * from t_record
+		order by record_id desc
+	</select>
+	
+	<!--分页查询结果-->
+	<select id="findPage" resultType="map" useCache="false">
+		select
+		record_id recordId, card_id cardId, address address, post_code postCode, phone phone, tel tel, qq_num qqNum, email email, sex sex, party party, birthday birthday, race race, education education, speciality speciality, hobby hobby, remark remark, create_time createTime 
+		 from t_record
+		<trim prefix="where" suffixOverrides="and">
+			<if test="arg1.cardId!=null and arg1.cardId!=''">
+					card_id=#{arg1.cardId, jdbcType=VARCHAR} and
+			</if>
+			<if test="arg1.address!=null and arg1.address!=''">
+					address=#{arg1.address, jdbcType=VARCHAR} and
+			</if>
+			<if test="arg1.postCode!=null and arg1.postCode!=''">
+					post_code=#{arg1.postCode, jdbcType=VARCHAR} and
+			</if>
+			<if test="arg1.phone!=null and arg1.phone!=''">
+					phone=#{arg1.phone, jdbcType=VARCHAR} and
+			</if>
+			<if test="arg1.tel!=null and arg1.tel!=''">
+					tel=#{arg1.tel, jdbcType=VARCHAR} and
+			</if>
+			<if test="arg1.qqNum!=null and arg1.qqNum!=''">
+					qq_num=#{arg1.qqNum, jdbcType=VARCHAR} and
+			</if>
+			<if test="arg1.email!=null and arg1.email!=''">
+					email=#{arg1.email, jdbcType=VARCHAR} and
+			</if>
+			<if test="arg1.sex!=null and arg1.sex!=''">
+					sex=#{arg1.sex, jdbcType=VARCHAR} and
+			</if>
+			<if test="arg1.party!=null and arg1.party!=''">
+					party=#{arg1.party, jdbcType=VARCHAR} and
+			</if>
+			<if test="arg1.birthday!=null">
+			    	birthday=#{arg1.birthday, jdbcType=DATE} and
+			</if>
+			<if test="arg1.race!=null and arg1.race!=''">
+					race=#{arg1.race, jdbcType=VARCHAR} and
+			</if>
+			<if test="arg1.education!=null and arg1.education!=''">
+					education=#{arg1.education, jdbcType=VARCHAR} and
+			</if>
+			<if test="arg1.speciality!=null and arg1.speciality!=''">
+					speciality=#{arg1.speciality, jdbcType=VARCHAR} and
+			</if>
+			<if test="arg1.hobby!=null and arg1.hobby!=''">
+					hobby=#{arg1.hobby, jdbcType=VARCHAR} and
+			</if>
+			<if test="arg1.remark!=null and arg1.remark!=''">
+					remark=#{arg1.remark, jdbcType=VARCHAR} and
+			</if>
+			<if test="arg1.createTime!=null">
+			    	create_time=#{arg1.createTime, jdbcType=DATE}
+			</if>
+		</trim>
+        order by record_id desc
+		limit #{arg0.firstNum},#{arg0.pageSize}
+	</select>
+	
+	<!--分页查询统计-->
+	<select id="countPage" resultType="int" useCache="false">
+		select count(1) from t_record
+		<trim prefix="where" suffixOverrides="and">
+			<if test="arg1.cardId!=null and arg1.cardId!=''">
+					card_id=#{arg1.cardId, jdbcType=VARCHAR} and
+			</if>
+			<if test="arg1.address!=null and arg1.address!=''">
+					address=#{arg1.address, jdbcType=VARCHAR} and
+			</if>
+			<if test="arg1.postCode!=null and arg1.postCode!=''">
+					post_code=#{arg1.postCode, jdbcType=VARCHAR} and
+			</if>
+			<if test="arg1.phone!=null and arg1.phone!=''">
+					phone=#{arg1.phone, jdbcType=VARCHAR} and
+			</if>
+			<if test="arg1.tel!=null and arg1.tel!=''">
+					tel=#{arg1.tel, jdbcType=VARCHAR} and
+			</if>
+			<if test="arg1.qqNum!=null and arg1.qqNum!=''">
+					qq_num=#{arg1.qqNum, jdbcType=VARCHAR} and
+			</if>
+			<if test="arg1.email!=null and arg1.email!=''">
+					email=#{arg1.email, jdbcType=VARCHAR} and
+			</if>
+			<if test="arg1.sex!=null and arg1.sex!=''">
+					sex=#{arg1.sex, jdbcType=VARCHAR} and
+			</if>
+			<if test="arg1.party!=null and arg1.party!=''">
+					party=#{arg1.party, jdbcType=VARCHAR} and
+			</if>
+			<if test="arg1.birthday!=null">
+			    	birthday=#{arg1.birthday, jdbcType=DATE} and
+			</if>
+			<if test="arg1.race!=null and arg1.race!=''">
+					race=#{arg1.race, jdbcType=VARCHAR} and
+			</if>
+			<if test="arg1.education!=null and arg1.education!=''">
+					education=#{arg1.education, jdbcType=VARCHAR} and
+			</if>
+			<if test="arg1.speciality!=null and arg1.speciality!=''">
+					speciality=#{arg1.speciality, jdbcType=VARCHAR} and
+			</if>
+			<if test="arg1.hobby!=null and arg1.hobby!=''">
+					hobby=#{arg1.hobby, jdbcType=VARCHAR} and
+			</if>
+			<if test="arg1.remark!=null and arg1.remark!=''">
+					remark=#{arg1.remark, jdbcType=VARCHAR} and
+			</if>
+			<if test="arg1.createTime!=null">
+			    	create_time=#{arg1.createTime, jdbcType=DATE}
+			</if>
+		</trim>		
+	</select>
+	
+	<!--通过Id修改信息-->
+	<update id="modifyById" parameterType="com.tian.control_system.pojo.Record">
+		update t_record
+		<trim prefix="set" suffixOverrides=",">
+			<if test="cardId!=null and cardId!=''">
+					card_id=#{cardId, jdbcType=VARCHAR},
+			</if>
+			<if test="address!=null and address!=''">
+					address=#{address, jdbcType=VARCHAR},
+			</if>
+			<if test="postCode!=null and postCode!=''">
+					post_code=#{postCode, jdbcType=VARCHAR},
+			</if>
+			<if test="phone!=null and phone!=''">
+					phone=#{phone, jdbcType=VARCHAR},
+			</if>
+			<if test="tel!=null and tel!=''">
+					tel=#{tel, jdbcType=VARCHAR},
+			</if>
+			<if test="qqNum!=null and qqNum!=''">
+					qq_num=#{qqNum, jdbcType=VARCHAR},
+			</if>
+			<if test="email!=null and email!=''">
+					email=#{email, jdbcType=VARCHAR},
+			</if>
+			<if test="sex!=null and sex!=''">
+					sex=#{sex, jdbcType=VARCHAR},
+			</if>
+			<if test="party!=null and party!=''">
+					party=#{party, jdbcType=VARCHAR},
+			</if>
+			<if test="birthday!=null">
+			    	birthday=#{birthday, jdbcType=DATE},					
+			</if>
+			<if test="race!=null and race!=''">
+					race=#{race, jdbcType=VARCHAR},
+			</if>
+			<if test="education!=null and education!=''">
+					education=#{education, jdbcType=VARCHAR},
+			</if>
+			<if test="speciality!=null and speciality!=''">
+					speciality=#{speciality, jdbcType=VARCHAR},
+			</if>
+			<if test="hobby!=null and hobby!=''">
+					hobby=#{hobby, jdbcType=VARCHAR},
+			</if>
+			<if test="remark!=null and remark!=''">
+					remark=#{remark, jdbcType=VARCHAR},
+			</if>
+			<if test="createTime!=null">
+			    	create_time=#{createTime, jdbcType=DATE}					
+			</if>
+		</trim>		
+		WHERE record_id = #{recordId, jdbcType=INTEGER}
+	</update>
+	
+	<!--通过Id删除信息-->
+	<delete id="deleteById">
+		delete from t_record
+		where record_id =  #{_parameter}
+	</delete>
+	
+	<!--通过信息条件删除-->
+	<delete id="delete">
+		delete from t_record
+		<trim prefix="where " suffixOverrides="and">
+			<if test="cardId!=null and cardId!=''">
+					card_id=#{cardId, jdbcType=VARCHAR} and
+			</if>
+			<if test="address!=null and address!=''">
+					address=#{address, jdbcType=VARCHAR} and
+			</if>
+			<if test="postCode!=null and postCode!=''">
+					post_code=#{postCode, jdbcType=VARCHAR} and
+			</if>
+			<if test="phone!=null and phone!=''">
+					phone=#{phone, jdbcType=VARCHAR} and
+			</if>
+			<if test="tel!=null and tel!=''">
+					tel=#{tel, jdbcType=VARCHAR} and
+			</if>
+			<if test="qqNum!=null and qqNum!=''">
+					qq_num=#{qqNum, jdbcType=VARCHAR} and
+			</if>
+			<if test="email!=null and email!=''">
+					email=#{email, jdbcType=VARCHAR} and
+			</if>
+			<if test="sex!=null and sex!=''">
+					sex=#{sex, jdbcType=VARCHAR} and
+			</if>
+			<if test="party!=null and party!=''">
+					party=#{party, jdbcType=VARCHAR} and
+			</if>
+			<if test="birthday!=null">
+			    	birthday=#{birthday, jdbcType=DATE} and
+			</if>
+			<if test="race!=null and race!=''">
+					race=#{race, jdbcType=VARCHAR} and
+			</if>
+			<if test="education!=null and education!=''">
+					education=#{education, jdbcType=VARCHAR} and
+			</if>
+			<if test="speciality!=null and speciality!=''">
+					speciality=#{speciality, jdbcType=VARCHAR} and
+			</if>
+			<if test="hobby!=null and hobby!=''">
+					hobby=#{hobby, jdbcType=VARCHAR} and
+			</if>
+			<if test="remark!=null and remark!=''">
+					remark=#{remark, jdbcType=VARCHAR} and
+			</if>
+			<if test="createTime!=null">
+			    	create_time=#{createTime, jdbcType=DATE}
+			</if>
+		</trim>		
+	</delete>
+
+</mapper>

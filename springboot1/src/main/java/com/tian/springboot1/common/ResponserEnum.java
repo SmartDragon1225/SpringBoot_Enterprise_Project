@@ -23,7 +23,8 @@ public enum ResponserEnum {
     RUNTIME_EXCEPTION(202,"运行时异常"),
     Null_Pointer_Exception(203,"空指针异常"),
     NOT_FIND(204,"传入的参数为空！"),
-    NOT_UNIQUE(205,"用户已存在！");
+    NOT_UNIQUE(205,"用户已存在！"),
+    BA_GA(800,"八嘎雅鹿");
 
     private Integer code;
     private String message;

@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tian.control_system.mapper.DepartmentMapper">
+
+     <!--结果集，property为数据库字段，column为实际字段！-->
+	<resultMap id="DepartmentResult" type="com.tian.control_system.pojo.Department">
+		<result property="departmentId" column="departmentId" />
+		<result property="name" column="name" />			
+		<result property="remark" column="remark" />			
+		<result property="status" column="status" />			
+	</resultMap>
+	
+    <!--新增数据-->
+	<insert id="add" parameterType="com.tian.control_system.pojo.Department" useGeneratedKeys="true" keyProperty="departmentId">
+        insert into t_department (name, remark, status )
+		values (#{name}, #{remark}, #{status})
+	</insert>
+
+	<!--通过名称查询部门-->
+	<select id="findDepartmentByName" resultType="int">
+		  select count(1)
+		  from t_department
+		  <where>
+			  <if test="department.name != null and department.name != ''">
+					name = #{department.name}
+			  </if>
+		  </where>
+	</select>
+
+	<!--通过主键Id查询-->
+	<select id="findById" resultMap="DepartmentResult" useCache="false">
+		select * from t_department
+		where department_id = #{_parameter}
+	</select>
+	
+	<!--获取所有的数据-->
+	<select id="getAll" resultMap="DepartmentResult" useCache="false">
+        select * from t_department
+        where status = '1'
+		order by department_id desc
+	</select>
+
+	<!--分页查询部门-->
+	<select id="findDepartmentByPage" resultType="com.tian.control_system.pojo.Department">
+	  select td.departmentId,td.name,td.remark,td.status
+	  from t_department td
+
+	  <where>
+		  <if test="department.name != null and department.name != ''">
+			  td.name = #{department.name}
+		  </if>
+	  </where>
+	</select>
+
+	<!--PageList分页查询注意不要写分号，因为要拼接limit rows-->
+	<select id="pageList" resultType="com.tian.control_system.pojo.Department">
+		select * from t_department
+         <where>
+			  <if test="value != null and value !=''">
+				 value = #{value}
+			  </if>
+			 <if test="name != null and name !=''">
+				 name = #{name}
+			 </if>
+		 </where>
+	</select>
+
+	<!--PageList分页查询注意不要写分号，因为要拼接limit rows-->
+	<select id="select" resultType="com.tian.control_system.pojo.Department">
+		select * from t_department
+		<where>
+
+			<if test="name != null and name !=''">
+				and name = #{name}
+			</if>
+			<if test="status != null and status !=''">
+				and status = #{status}
+			</if>
+		</where>
+	</select>
+
+
+	<select id="countDepartmentByPage" resultType="int">
+		select count(1)
+		from t_department td
+		left join t_dictionary tdy
+		on td.status = tdy.value and tdy.category = 'DEPARTMENT_STATUS'
+		<where>
+			<if test="department.name != null and department.name != ''">
+				td.name = #{department.name}
+			</if>
+		</where>
+	</select>
+
+
+	<!--分页查询结果-->
+	<select id="findPage" resultType="map" useCache="false">
+		select
+		department_id departmentId, name name, remark remark, status status 
+		 from t_department
+		<trim prefix="where" suffixOverrides="and">
+			<if test="arg1.name!=null and arg1.name!=''">
+					name=#{arg1.name, jdbcType=VARCHAR} and
+			</if>
+			<if test="arg1.remark!=null and arg1.remark!=''">
+					remark=#{arg1.remark, jdbcType=VARCHAR} and
+			</if>
+			<if test="arg1.status!=null and arg1.status!=''">
+			    	status=#{arg1.status, jdbcType=INTEGER}
+			</if>
+		</trim>
+        order by department_id desc
+		limit #{arg0.firstNum},#{arg0.pageSize}
+	</select>
+	
+	<!--分页查询统计-->
+	<select id="countPage" resultType="int" useCache="false">
+		select count(1) from t_department
+		<trim prefix="where" suffixOverrides="and">
+			<if test="arg1.name!=null and arg1.name!=''">
+					name=#{arg1.name, jdbcType=VARCHAR} and
+			</if>
+			<if test="arg1.remark!=null and arg1.remark!=''">
+					remark=#{arg1.remark, jdbcType=VARCHAR} and
+			</if>
+			<if test="arg1.status!=null and arg1.status!=''">
+			    	status=#{arg1.status, jdbcType=INTEGER}
+			</if>
+		</trim>		
+	</select>
+	
+	<!--通过Id修改信息-->
+	<update id="modifyById" parameterType="com.tian.control_system.pojo.Department">
+		update t_department
+		<trim prefix="set" suffixOverrides=",">
+			<if test="name!=null and name!=''">
+					name=#{name, jdbcType=VARCHAR},
+			</if>
+			<if test="remark!=null and remark!=''">
+					remark=#{remark, jdbcType=VARCHAR},
+			</if>
+			<if test="status!=null and status!=''">
+			    	status=#{status, jdbcType=INTEGER}					
+			</if>
+		</trim>		
+		WHERE department_id = #{departmentId, jdbcType=INTEGER}
+	</update>
+	
+	<!--通过Id删除信息-->
+	<delete id="deleteById">
+		delete from t_department
+		where department_id =  #{_parameter}
+	</delete>
+	
+	<!--通过信息条件删除-->
+	<delete id="delete">
+		delete from t_department
+		<trim prefix="where " suffixOverrides="and">
+			<if test="name!=null and name!=''">
+					name=#{name, jdbcType=VARCHAR} and
+			</if>
+			<if test="remark!=null and remark!=''">
+					remark=#{remark, jdbcType=VARCHAR} and
+			</if>
+			<if test="status!=null and status!=''">
+			    	status=#{status, jdbcType=INTEGER}
+			</if>
+		</trim>		
+	</delete>
+
+</mapper>

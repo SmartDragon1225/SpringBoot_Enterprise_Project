@@ -4,9 +4,28 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.tian.springboot_mysely.mapper.StudentDao">
 
+    <resultMap id="studentResultMap" type="com.tian.springboot_mysely.pojo.Student">
+        <id property="id" column="id" />
+        <result property="name" column="name"/>
+        <result property="age" column="age"/>
+        <result property="sex" column="sex"/>
+        <result property="place" column="place"/>
+        <result property="creat_time" column="creatTime"/>
+        <result property="updata_time" column="updataTime"/>
+    </resultMap>
+
+    <sql id="Sql_List">
+        id,
+        name,
+        sex,
+        age,
+        place,
+        creat_time,
+        updata_time
+    </sql>
     <!--list-->
-    <select id="list" resultType="com.tian.springboot_mysely.pojo.Student">
-        select * from student;
+    <select id="list" resultMap="studentResultMap">
+        select <include refid="Sql_List"/>from student;
     </select>
 
     <!--PageList分页查询注意不要写分号，因为要拼接limit rows-->
@@ -15,8 +34,8 @@
     </select>
 
     <!--selectById-->
-    <select id="slectById" resultType="com.tian.springboot_mysely.pojo.Student">
-        select * from student where id = #{id}
+    <select id="slectById" resultMap="studentResultMap">
+        select <include refid="Sql_List"/> from student where name = #{name}
     </select>
 
     <!--login-->

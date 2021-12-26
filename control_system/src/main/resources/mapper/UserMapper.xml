@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tian.control_system.mapper.UserMapper">
+
+     <!--结果集-->
+	<resultMap id="UserResult" type="com.tian.control_system.pojo.User">
+		<result property="uid" column="uid" />			
+		<result property="username" column="username" />			
+		<result property="password" column="password" />			
+	</resultMap>
+
+	<!--登录-->
+	<select id="login" resultMap="UserResult">
+		select *
+		from t_user
+		<where>
+			<if test="user.username != null and user.username != ''">
+				username = #{user.username}
+			</if>
+			<if test="user.password != null and user.password != ''">
+				and password = #{user.password}
+			</if>
+		</where>
+	</select>
+
+
+	<select id="toLogin" resultMap="UserResult">
+		select *
+		from t_user
+		<where>
+			<if test="user.username != null and user.username != ''">
+				username = #{username}
+			</if>
+			<if test="user.password != null and user.password != ''">
+				and password = #{password}
+			</if>
+		</where>
+	</select>
+	
+    <!--新增数据-->
+	<insert id="add" parameterType="com.tian.control_system.pojo.User" useGeneratedKeys="true" keyProperty="uid">
+        insert into t_user (username, password )
+		values (#{username}, #{password})
+	</insert>
+	
+	<!--通过主键Id查询-->
+	<select id="findById" resultMap="UserResult" useCache="false">
+		select * from t_user
+		where uid = #{_parameter}
+	</select>
+	
+	<!--获取所有的数据-->
+	<select id="getAll" resultMap="UserResult" useCache="false">
+        select * from t_user
+		order by uid desc
+	</select>
+	
+	<!--分页查询结果-->
+	<select id="findPage" resultType="map" useCache="false">
+		select
+		uid uid, username username, password password 
+		 from t_user
+		<trim prefix="where" suffixOverrides="and">
+			<if test="arg1.username!=null and arg1.username!=''">
+					username=#{arg1.username, jdbcType=VARCHAR} and
+			</if>
+			<if test="arg1.password!=null and arg1.password!=''">
+					password=#{arg1.password, jdbcType=VARCHAR}
+			</if>
+		</trim>
+        order by uid desc
+		limit #{arg0.firstNum},#{arg0.pageSize}
+	</select>
+	
+	<!--分页查询统计-->
+	<select id="countPage" resultType="int" useCache="false">
+		select count(1) from t_user
+		<trim prefix="where" suffixOverrides="and">
+			<if test="arg1.username!=null and arg1.username!=''">
+					username=#{arg1.username, jdbcType=VARCHAR} and
+			</if>
+			<if test="arg1.password!=null and arg1.password!=''">
+					password=#{arg1.password, jdbcType=VARCHAR}
+			</if>
+		</trim>		
+	</select>
+	
+	<!--通过Id修改信息-->
+	<update id="modifyById" parameterType="com.tian.control_system.pojo.User">
+		update t_user
+		<trim prefix="set" suffixOverrides=",">
+			<if test="username!=null and username!=''">
+					username=#{username, jdbcType=VARCHAR},
+			</if>
+			<if test="password!=null and password!=''">
+					password=#{password, jdbcType=VARCHAR}
+			</if>
+		</trim>		
+		WHERE uid = #{uid, jdbcType=INTEGER}
+	</update>
+
+	<update id="updatePwd" parameterType="int">
+		update t_user
+		<trim prefix="set" suffixOverrides=",">
+			<if test="password!=null and password!=''">
+				password=#{password}
+			</if>
+		</trim>
+		WHERE uid = #{userId}
+	</update>
+	
+	<!--通过Id删除信息-->
+	<delete id="deleteById">
+		delete from t_user
+		where uid =  #{_parameter}
+	</delete>
+	
+	<!--通过信息条件删除-->
+	<delete id="delete">
+		delete from t_user
+		<trim prefix="where " suffixOverrides="and">
+			<if test="username!=null and username!=''">
+					username=#{username, jdbcType=VARCHAR} and
+			</if>
+			<if test="password!=null and password!=''">
+					password=#{password, jdbcType=VARCHAR}
+			</if>
+		</trim>		
+	</delete>
+
+</mapper>

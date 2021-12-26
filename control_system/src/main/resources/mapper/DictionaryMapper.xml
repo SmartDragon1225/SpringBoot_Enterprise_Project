@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tian.control_system.mapper.DictionaryMapper">
+
+     <!--结果集-->
+	<resultMap id="DictionaryResult" type="com.tian.control_system.pojo.Dictionary">
+		<result property="id" column="id" />			
+		<result property="value" column="value" />			
+		<result property="name" column="name" />			
+		<result property="category" column="category" />			
+		<result property="createTime" column="createTtime" />
+	</resultMap>
+	
+    <!--新增数据-->
+	<insert id="add" parameterType="com.tian.control_system.pojo.Dictionary" useGeneratedKeys="true" keyProperty="id">
+        insert into t_dictionary (id ,value, name, category, createTime )
+		values (#{id}, #{value}, #{name}, #{category}, #{createTime})
+	</insert>
+
+    <!--分页查询-->
+    <select id="pageList" resultType="com.tian.control_system.pojo.Dictionary">
+		select * from t_dictionary
+	</select>
+
+	<!--通过主键Id查询-->
+	<select id="findById" resultMap="DictionaryResult" useCache="false">
+		select * from t_dictionary
+		where id = #{_parameter}
+	</select>
+	
+	<!--获取所有的数据-->
+	<select id="getAll" resultMap="DictionaryResult" useCache="false">
+        select * from t_dictionary
+		order by id desc
+	</select>
+
+	<!--获取所有的状态-->
+	<select id="findEmployeeStatus" resultMap="DictionaryResult">
+		select *
+		from t_dictionary
+		where category = 'EMPLOYEE_STATUS'
+	</select>
+	
+	<!--分页查询结果-->
+	<select id="findPage" resultType="map" useCache="false">
+		select
+		id id, value value, name name, category category, create_time createTime 
+		 from t_dictionary
+		<trim prefix="where" suffixOverrides="and">
+			<if test="arg1.value!=null and arg1.value!=''">
+			    	value=#{arg1.value, jdbcType=INTEGER} and
+			</if>
+			<if test="arg1.name!=null and arg1.name!=''">
+					name=#{arg1.name, jdbcType=VARCHAR} and
+			</if>
+			<if test="arg1.category!=null and arg1.category!=''">
+					category=#{arg1.category, jdbcType=VARCHAR} and
+			</if>
+			<if test="arg1.createTime!=null">
+			    	create_time=#{arg1.createTime, jdbcType=DATE}
+			</if>
+		</trim>
+        order by id desc
+		limit #{arg0.firstNum},#{arg0.pageSize}
+	</select>
+	
+
+	<!--通过Id修改信息-->
+	<update id="modifyById" parameterType="com.tian.control_system.pojo.Dictionary">
+		update t_dictionary
+		<trim prefix="set" suffixOverrides=",">
+			<if test="value!=null and value!=''">
+			    	value=#{value, jdbcType=INTEGER},					
+			</if>
+			<if test="name!=null and name!=''">
+					name=#{name, jdbcType=VARCHAR},
+			</if>
+			<if test="category!=null and category!=''">
+					category=#{category, jdbcType=VARCHAR},
+			</if>
+			<if test="createTime!=null">
+			    	create_time=#{createTime, jdbcType=DATE}					
+			</if>
+		</trim>		
+		WHERE id = #{id, jdbcType=INTEGER}
+	</update>
+	
+	<!--通过Id删除信息-->
+	<delete id="deleteById">
+		delete from t_dictionary
+		where id =  #{_parameter}
+	</delete>
+	
+	<!--通过信息条件删除-->
+	<delete id="delete">
+		delete from t_dictionary
+		<trim prefix="where " suffixOverrides="and">
+			<if test="value!=null and value!=''">
+			    	value=#{value, jdbcType=INTEGER} and
+			</if>
+			<if test="name!=null and name!=''">
+					name=#{name, jdbcType=VARCHAR} and
+			</if>
+			<if test="category!=null and category!=''">
+					category=#{category, jdbcType=VARCHAR} and
+			</if>
+			<if test="createTime!=null">
+			    	create_time=#{createTime, jdbcType=DATE}
+			</if>
+		</trim>		
+	</delete>
+
+</mapper>

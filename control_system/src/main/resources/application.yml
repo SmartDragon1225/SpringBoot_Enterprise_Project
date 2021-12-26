@@ -1,0 +1,25 @@
+spring:
+#   当出现 404 错误时, 直接抛出异常
+  throw-exception-if-no-handler-found: true
+  resources.add-mappings: false
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/control_system?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&useSSL=false
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+server:
+  tomcat:
+    uri-encoding: UTF-8
+tomcat:
+ port: 8080 
+
+#mybatis的文件配置
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.tian.control_system.pojo
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+
+

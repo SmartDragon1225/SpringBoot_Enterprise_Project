@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tian.control_system.mapper.EmployeeMapper">
+
+     <!--结果集-->
+	<resultMap id="EmployeeResult" type="com.tian.control_system.pojo.Employee">
+		<result property="employeeId" column="employee_id" />			
+		<result property="name" column="name" />			
+		<result property="departmentId" column="department_id" />			
+		<result property="jobId" column="job_id" />			
+		<result property="recordId" column="record_id" />			
+		<result property="status" column="status" />			
+		<result property="createTime" column="create_time" />			
+	</resultMap>
+	
+	<resultMap id="employeeVoResult" type="com.tian.control_system.pojo.vo.EmployeeVo" extends="EmployeeResult">
+		<result property="deptName" column="deptName"/>
+		<result property="jobName" column="jobName"/>
+		<association property="record" javaType="com.tian.control_system.pojo.Record">
+			<result property="recordId" column="record_id"/>
+			<result property="cardId" column="card_id"/>
+			<result property="address" column="address"/>
+			<result property="postCode" column="post_code"/>
+			<result property="phone" column="phone"/>
+			<result property="tel" column="tel"/>
+			<result property="qqNum" column="qq_num"/>
+			<result property="email" column="email"/>
+			<result property="sex" column="sex"/>
+			<result property="party" column="party"/>
+			<result property="birthday" column="birthday"/>
+			<result property="race" column="race"/>
+			<result property="education" column="education"/>
+			<result property="speciality" column="speciality"/>
+			<result property="hobby" column="hobby"/>
+			<result property="remark" column="remark"/>
+		</association>
+	</resultMap>
+	
+    <!--新增数据-->
+	<insert id="add" parameterType="com.tian.control_system.pojo.Employee" useGeneratedKeys="true" keyProperty="employeeId">
+        insert into t_employee (name, department_id, job_id, record_id, status, create_time )
+		values (#{name}, #{departmentId}, #{jobId}, #{recordId}, #{status}, #{createTime})
+	</insert>
+	
+	<!--通过主键Id查询-->
+	<select id="findById" resultMap="EmployeeResult" useCache="false">
+		select * from t_employee
+		where employee_id = #{_parameter}
+	</select>
+	
+	<!--获取所有的数据-->
+	<select id="getAll" resultMap="EmployeeResult" useCache="false">
+        select * from t_employee
+		order by employee_id desc
+	</select>
+
+	<select id="findEmployeeNum" resultType="com.tian.control_system.pojo.vo.EmployeeNumber">
+		select count(1) number,tj.`name` jobName
+		from t_employee te
+		left join t_job tj
+		on te.job_id = tj.job_id
+		where te.job_id = #{id}
+	</select>
+
+	<!--分页查询员工档案-->
+	<select id="findAllRecordsByPage" resultType="com.tian.control_system.pojo.vo.EmployeeVo">
+		select te.name,te.employee_id employeeId,td.name deptName,tj.name jobName,te.record_id recordId,te.create_time createTime,td2.name statusName
+		from t_employee te
+		left join t_department td
+		on td.department_id = te.department_id
+		left join t_job tj
+		on tj.job_id = te.job_id
+		left join t_dictionary td2
+		on td2.value = te.status and td2.category = 'EMPLOYEE_STATUS'
+		<where>
+			<if test="name != null and name != ''">
+				te.name = #{name}
+			</if>
+			<if test="deptId != null">
+				 and te.department_id = #{deptId}
+			</if>
+			<if test="jobId != null">
+				and te.job_id = #{jobId}
+			</if>
+		</where>
+	</select>
+
+	<select id="countAllRecordsByPage" resultType="int" useCache="false">
+		select count(1)
+		from t_employee te
+		left join t_department td
+		on td.department_id = te.department_id
+		left join t_job tj
+		on tj.job_id = te.job_id
+		<where>
+			<if test="name != null and name != ''">
+				name = #{name}
+			</if>
+			<if test="deptId != null">
+				and departmentId = #{deptId}
+			</if>
+			<if test="jobId != null">
+				and jobId = #{jobId}
+			</if>
+		</where>
+	</select>
+
+	<!--通过ID获取员工档案信息-->
+	<select id="findInfoById" resultMap="employeeVoResult">
+		select te.name,te.employee_id,te.job_id,te.department_id,tr.*
+		from t_employee te
+		left join t_record tr
+		on tr.record_id = te.record_id
+		<where>
+			<if test="id != null">
+				te.employee_id = #{id}
+			</if>
+		</where>
+	</select>
+
+
+	<!--分页查询结果-->
+	<select id="findPage" resultType="map" useCache="false">
+		select
+		employee_id employeeId, name name, department_id departmentId, job_id jobId, record_id recordId, status status, create_time createTime 
+		 from t_employee
+		<trim prefix="where" suffixOverrides="and">
+			<if test="arg1.name!=null and arg1.name!=''">
+					name=#{arg1.name, jdbcType=VARCHAR} and
+			</if>
+			<if test="arg1.departmentId!=null and arg1.departmentId!=''">
+			    	department_id=#{arg1.departmentId, jdbcType=INTEGER} and
+			</if>
+			<if test="arg1.jobId!=null and arg1.jobId!=''">
+			    	job_id=#{arg1.jobId, jdbcType=INTEGER} and
+			</if>
+			<if test="arg1.recordId!=null and arg1.recordId!=''">
+			    	record_id=#{arg1.recordId, jdbcType=INTEGER} and
+			</if>
+			<if test="arg1.status!=null and arg1.status!=''">
+			    	status=#{arg1.status, jdbcType=INTEGER} and
+			</if>
+			<if test="arg1.createTime!=null">
+			    	create_time=#{arg1.createTime, jdbcType=DATE}
+			</if>
+		</trim>
+        order by employee_id desc
+		limit #{arg0.firstNum},#{arg0.pageSize}
+	</select>
+	
+	<!--分页查询统计-->
+	<select id="countPage" resultType="int" useCache="false">
+		select count(1) from t_employee
+		<trim prefix="where" suffixOverrides="and">
+			<if test="arg1.name!=null and arg1.name!=''">
+					name=#{arg1.name, jdbcType=VARCHAR} and
+			</if>
+			<if test="arg1.departmentId!=null and arg1.departmentId!=''">
+			    	department_id=#{arg1.departmentId, jdbcType=INTEGER} and
+			</if>
+			<if test="arg1.jobId!=null and arg1.jobId!=''">
+			    	job_id=#{arg1.jobId, jdbcType=INTEGER} and
+			</if>
+			<if test="arg1.recordId!=null and arg1.recordId!=''">
+			    	record_id=#{arg1.recordId, jdbcType=INTEGER} and
+			</if>
+			<if test="arg1.status!=null and arg1.status!=''">
+			    	status=#{arg1.status, jdbcType=INTEGER} and
+			</if>
+			<if test="arg1.createTime!=null">
+			    	create_time=#{arg1.createTime, jdbcType=DATE}
+			</if>
+		</trim>		
+	</select>
+	
+	<!--通过Id修改信息-->
+	<update id="modifyById" parameterType="com.tian.control_system.pojo.Employee">
+		update t_employee
+		<trim prefix="set" suffixOverrides=",">
+			<if test="name!=null and name!=''">
+					name=#{name, jdbcType=VARCHAR},
+			</if>
+			<if test="departmentId!=null and departmentId!=''">
+			    	department_id=#{departmentId, jdbcType=INTEGER},					
+			</if>
+			<if test="jobId!=null and jobId!=''">
+			    	job_id=#{jobId, jdbcType=INTEGER},					
+			</if>
+			<if test="recordId!=null and recordId!=''">
+			    	record_id=#{recordId, jdbcType=INTEGER},					
+			</if>
+			<if test="status!=null and status!=''">
+			    	status=#{status, jdbcType=INTEGER},					
+			</if>
+			<if test="createTime!=null">
+			    	create_time=#{createTime, jdbcType=DATE}					
+			</if>
+		</trim>		
+		WHERE employee_id = #{employeeId, jdbcType=INTEGER}
+	</update>
+	
+	<!--通过Id删除信息-->
+	<delete id="deleteById">
+		delete from t_employee
+		where employee_id =  #{_parameter}
+	</delete>
+
+	<select id="findStatusById" resultType="com.tian.control_system.pojo.vo.EmployeeVo">
+		select te.name,te.status
+		from t_employee te
+		<where>
+			<if test="id != null">
+				te.employee_id = #{id}
+			</if>
+		</where>
+	</select>
+	<!--通过信息条件删除-->
+	<delete id="delete">
+		delete from t_employee
+		<trim prefix="where " suffixOverrides="and">
+			<if test="name!=null and name!=''">
+					name=#{name, jdbcType=VARCHAR} and
+			</if>
+			<if test="departmentId!=null and departmentId!=''">
+			    	department_id=#{departmentId, jdbcType=INTEGER} and
+			</if>
+			<if test="jobId!=null and jobId!=''">
+			    	job_id=#{jobId, jdbcType=INTEGER} and
+			</if>
+			<if test="recordId!=null and recordId!=''">
+			    	record_id=#{recordId, jdbcType=INTEGER} and
+			</if>
+			<if test="status!=null and status!=''">
+			    	status=#{status, jdbcType=INTEGER} and
+			</if>
+			<if test="createTime!=null">
+			    	create_time=#{createTime, jdbcType=DATE}
+			</if>
+		</trim>		
+	</delete>
+
+</mapper>

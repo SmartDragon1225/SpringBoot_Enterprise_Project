@@ -24,12 +24,12 @@ public interface StudentService {
     List<Student> list();
     PageEntity pageList(Integer page, Integer rows);
 
-    Student select(int id);
+    Student select(String name);
 
     int add(Student student);//平时开发
     void add(Map map);//企业开发
 
-    int delete(int id);
+    int delete(Long id);
 
     int update(Student student);//平时开发
     void update(Map map);//企业开发

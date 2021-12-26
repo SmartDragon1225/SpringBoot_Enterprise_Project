@@ -36,7 +36,7 @@ public class StudentController {
 
     @Autowired
     StudentServiceImpl studentService;
-
+    //StudentServiceImpl studentService = new StudentServiceImpl();
     @RequestMapping("/list")//http:127.0.0.1:8089/student/list   (get)
     public ResponseServer list(){
         HashMap<Object, Object> hashMap = new HashMap<>();

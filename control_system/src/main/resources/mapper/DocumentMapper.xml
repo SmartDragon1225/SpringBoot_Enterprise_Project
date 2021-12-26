@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tian.control_system.mapper.DocumentMapper">
+
+     <!--结果集-->
+	<resultMap id="DocumentResult" type="com.tian.control_system.pojo.Document">
+		<result property="documentId" column="document_id" />			
+		<result property="title" column="title" />			
+		<result property="content" column="content" />			
+		<result property="file" column="file" />			
+		<result property="createBy" column="create_by" />			
+		<result property="createTime" column="create_time" />			
+		<result property="activeTime" column="active_time" />			
+	</resultMap>
+	
+    <!--新增数据-->
+	<insert id="add" parameterType="com.tian.control_system.pojo.Document" useGeneratedKeys="true" keyProperty="documentId">
+        insert into t_document (title, content, file, create_by, create_time, active_time )
+		values (#{title}, #{content}, #{file}, #{createBy}, #{createTime}, #{activeTime})
+	</insert>
+	
+	<!--通过主键Id查询-->
+	<select id="findById" resultMap="DocumentResult" useCache="false">
+		select * from t_document
+		where document_id = #{_parameter}
+	</select>
+	
+	<!--获取所有的数据-->
+	<select id="getAll" resultMap="DocumentResult" useCache="false">
+        select * from t_document
+		order by document_id desc
+	</select>
+
+	<select id="findAllByPage" resultType="com.tian.control_system.pojo.vo.DocumentVo">
+		select td.document_id documentId,td.title,td.content,tu.username userName,td.active_time activeTime
+		from t_document td
+		left join t_user tu
+		on tu.uid = td.create_by
+		<where>
+			<if test="start != null and start !=''">
+				  td.create_time &gt;= #{start}
+			</if>
+			<if test="end != null and end !=''">
+				 and td.active_time &lt;= #{end}
+			</if>
+		</where>
+	</select>
+
+	<select id="countAllByPage" resultType="int">
+		select count(1)
+		from t_document td
+		left join t_user tu
+		on tu.uid = td.create_by
+		<where>
+			<if test="start != null and start !=''">
+				td.create_time &gt;= #{start}
+			</if>
+			<if test="end != null and end !=''">
+				and td.active_time &lt;= #{end}
+			</if>
+		</where>
+	</select>
+
+	<!--分页查询结果-->
+	<select id="findPage" resultType="map" useCache="false">
+		select
+		document_id documentId, title title, content content, file file, create_by createBy, create_time createTime, active_time activeTime 
+		 from t_document
+		<trim prefix="where" suffixOverrides="and">
+			<if test="arg1.title!=null and arg1.title!=''">
+					title=#{arg1.title, jdbcType=VARCHAR} and
+			</if>
+			<if test="arg1.content!=null and arg1.content!=''">
+					content=#{arg1.content, jdbcType=VARCHAR} and
+			</if>
+			<if test="arg1.file!=null and arg1.file!=''">
+					file=#{arg1.file, jdbcType=VARCHAR} and
+			</if>
+			<if test="arg1.createBy!=null and arg1.createBy!=''">
+			    	create_by=#{arg1.createBy, jdbcType=INTEGER} and
+			</if>
+			<if test="arg1.createTime!=null">
+			    	create_time=#{arg1.createTime, jdbcType=DATE} and
+			</if>
+			<if test="arg1.activeTime!=null">
+			    	active_time=#{arg1.activeTime, jdbcType=DATE}
+			</if>
+		</trim>
+        order by document_id desc
+		limit #{arg0.firstNum},#{arg0.pageSize}
+	</select>
+	
+	<!--分页查询统计-->
+	<select id="countPage" resultType="int" useCache="false">
+		select count(1) from t_document
+		<trim prefix="where" suffixOverrides="and">
+			<if test="arg1.title!=null and arg1.title!=''">
+					title=#{arg1.title, jdbcType=VARCHAR} and
+			</if>
+			<if test="arg1.content!=null and arg1.content!=''">
+					content=#{arg1.content, jdbcType=VARCHAR} and
+			</if>
+			<if test="arg1.file!=null and arg1.file!=''">
+					file=#{arg1.file, jdbcType=VARCHAR} and
+			</if>
+			<if test="arg1.createBy!=null and arg1.createBy!=''">
+			    	create_by=#{arg1.createBy, jdbcType=INTEGER} and
+			</if>
+			<if test="arg1.createTime!=null">
+			    	create_time=#{arg1.createTime, jdbcType=DATE} and
+			</if>
+			<if test="arg1.activeTime!=null">
+			    	active_time=#{arg1.activeTime, jdbcType=DATE}
+			</if>
+		</trim>		
+	</select>
+	
+	<!--通过Id修改信息-->
+	<update id="modifyById" parameterType="com.tian.control_system.pojo.Document">
+		update t_document
+		<trim prefix="set" suffixOverrides=",">
+			<if test="title!=null and title!=''">
+					title=#{title, jdbcType=VARCHAR},
+			</if>
+			<if test="content!=null and content!=''">
+					content=#{content, jdbcType=VARCHAR},
+			</if>
+			<if test="file!=null and file!=''">
+					file=#{file, jdbcType=VARCHAR},
+			</if>
+			<if test="createBy!=null and createBy!=''">
+			    	create_by=#{createBy, jdbcType=INTEGER},					
+			</if>
+			<if test="createTime!=null">
+			    	create_time=#{createTime, jdbcType=DATE},					
+			</if>
+			<if test="activeTime!=null">
+			    	active_time=#{activeTime, jdbcType=DATE}					
+			</if>
+		</trim>		
+		WHERE document_id = #{documentId, jdbcType=INTEGER}
+	</update>
+	
+	<!--通过Id删除信息-->
+	<delete id="deleteById">
+		delete from t_document
+		where document_id =  #{_parameter}
+	</delete>
+	
+	<!--通过信息条件删除-->
+	<delete id="delete">
+		delete from t_document
+		<trim prefix="where " suffixOverrides="and">
+			<if test="title!=null and title!=''">
+					title=#{title, jdbcType=VARCHAR} and
+			</if>
+			<if test="content!=null and content!=''">
+					content=#{content, jdbcType=VARCHAR} and
+			</if>
+			<if test="file!=null and file!=''">
+					file=#{file, jdbcType=VARCHAR} and
+			</if>
+			<if test="createBy!=null and createBy!=''">
+			    	create_by=#{createBy, jdbcType=INTEGER} and
+			</if>
+			<if test="createTime!=null">
+			    	create_time=#{createTime, jdbcType=DATE} and
+			</if>
+			<if test="activeTime!=null">
+			    	active_time=#{activeTime, jdbcType=DATE}
+			</if>
+		</trim>		
+	</delete>
+
+</mapper>

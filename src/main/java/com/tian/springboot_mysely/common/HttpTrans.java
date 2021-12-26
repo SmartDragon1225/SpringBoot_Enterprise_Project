@@ -18,6 +18,7 @@ import java.io.IOException;
  * Modified By: SmartDragon
  */
 public class HttpTrans {
+
     public String trans(String trandName){
         HttpClient httpClient = new HttpClient();
         String url = "http://127.0.0.1/student" + trandName;
@@ -46,7 +47,7 @@ public class HttpTrans {
 
     /**
      * 调用接口的方法
-     * @param name 名子
+     * @param name 拼接路径的名子
      * @return
      */
     public JSONObject getTrans(String name){
@@ -57,6 +58,23 @@ public class HttpTrans {
         HttpEntity r = new HttpEntity(httpHeaders);
         ResponseEntity<String> stringResponseEntity =
                 restTemplate.exchange(url, HttpMethod.GET,r,String.class);
+        return JSONObject.parseObject(stringResponseEntity.getBody());
+    }
+
+    /**
+     * 调用接口的方法
+     * @param name 路径名
+     * @param data 接口入参
+     * @return
+     */
+    public JSONObject getTrans(String name,String data){
+        RestTemplate restTemplate = new RestTemplate();
+        String url = "http://127.0.0.1:8889/" + name;
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.APPLICATION_JSON);//json格式
+        HttpEntity r = new HttpEntity(data,httpHeaders);
+        ResponseEntity<String> stringResponseEntity =
+                restTemplate.exchange(url, HttpMethod.POST,r,String.class);
         return JSONObject.parseObject(stringResponseEntity.getBody());
     }
 }

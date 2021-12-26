@@ -2,6 +2,7 @@ package com.tian.springboot_mysely.mapper;
 
 
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.tian.springboot_mysely.pojo.Student;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -17,19 +18,19 @@ import java.util.List;
  * Modified By: SmartDragon
  */
 @Mapper
-public interface StudentDao {
+public interface StudentDao extends BaseMapper<Student> {
 
     List<Student> list();
 
     List<Student> pageList();//分页查询
 
-    Student slectById(int id);
+    Student slectById(String name);
 
     int add(Student student);
 
-    int delete(int id);
+    int delete(Long id);
 
-    int update(Student student);
+    //int update(Student student);
 
     //login
     Student login(int id,String name);

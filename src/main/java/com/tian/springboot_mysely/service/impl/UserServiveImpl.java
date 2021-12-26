@@ -1,11 +1,15 @@
 package com.tian.springboot_mysely.service.impl;
 
 
+import com.tian.springboot_mysely.mapper.StudentDao;
 import com.tian.springboot_mysely.mapper.UserDao;
+import com.tian.springboot_mysely.pojo.Student;
 import com.tian.springboot_mysely.pojo.User;
 import com.tian.springboot_mysely.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
 
 /**
  * Package: com.tian.springbootlogin.service.impl
@@ -19,8 +23,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserServiveImpl implements UserService {
 
-    @Autowired
-    UserDao userDao;
+    @Resource
+    private UserDao userDao;
+
+    @Resource
+    private StudentDao studentDao;
+    @Resource
+    private RedisTemplate<String, Student> redisTemplate;
 
     @Override
     public User login(String username, String password) {
@@ -31,4 +40,23 @@ public class UserServiveImpl implements UserService {
     public int register(User user) {
         return userDao.register(user);
     }
+
+    @Override
+    public void modify(Student student) {
+        redisTemplate.opsForValue().set(student.getName(),student);
+    }
+
+    @Override
+    public boolean submit(Student student) {
+        if(Boolean.TRUE.equals(redisTemplate.hasKey(student.getName()))){
+            Student o = redisTemplate.opsForValue().get(student.getName());
+            studentDao.updateById(o);
+            redisTemplate.delete(student.getName());
+            return true;
+        }else {
+            studentDao.updateById(student);
+            return true;
+        }
+    }
+
 }

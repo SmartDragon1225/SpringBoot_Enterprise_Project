@@ -3,7 +3,10 @@ package com.tian.springboot_mysely.pojo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.core.serializer.Serializer;
 
+import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -18,12 +21,12 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Student {
-    private int id;
+public class Student implements Serializable {
+    private Long id;
     private String name;
     private int age;
     private String sex;
     private String place;
-    private Date creat_time;
-    private Date updata_time;
+    private Date creatTime;
+    private Date updataTime;
 }
